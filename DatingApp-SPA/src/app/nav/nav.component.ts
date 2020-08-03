@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from '../_service/auth.service';
+import { AlertifyService } from '../_service/alerifyjs.service';
 
 @Component({
   selector: 'app-nav',
@@ -10,28 +11,30 @@ import { AuthService } from '../_service/auth.service';
 export class NavComponent implements OnInit {
   @ViewChild('loginForm', { static: false }) loginForm: NgForm;
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    public authService: AuthService,
+    private alerify: AlertifyService
+  ) {}
 
   ngOnInit(): void {}
 
   onLogin() {
     this.authService.login(this.loginForm.value).subscribe(
       (next) => {
-        console.log('login successfully');
+        this.alerify.success('login successfully');
       },
       (err) => {
-        console.log(err);
+        this.alerify.error(err);
       }
     );
   }
 
   loggedIn() {
-    const token = localStorage.getItem('token');
-    return !!token;
+    return this.authService.loggedIn();
   }
 
   logout() {
     localStorage.removeItem('token');
-    console.log('User logged Out');
+    this.alerify.message('logged out');
   }
 }
