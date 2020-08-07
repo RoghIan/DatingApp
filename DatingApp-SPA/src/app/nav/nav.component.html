@@ -17,7 +17,9 @@
         >Welcome {{ authService.decodedToken?.unique_name | titlecase }}!</a
       >
       <div class="dropdown-menu mt-3" *dropdownMenu role="menu">
-        <a class="dropdown-item"><em class="fa fa-user"></em>Edit Profile</a>
+        <a class="dropdown-item" [routerLink]="['/member/edit']"
+          ><em class="fa fa-user"></em>Edit Profile</a
+        >
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" (click)="logout()"
           ><em class="fa fa-sign-out"></em>Logout</a
