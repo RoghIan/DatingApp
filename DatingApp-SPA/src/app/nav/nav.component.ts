@@ -12,6 +12,7 @@ import { AlertifyService } from '../_service/alerifyjs.service';
 })
 export class NavComponent implements OnInit {
   @ViewChild('loginForm', { static: false }) loginForm: NgForm;
+  photoUrl: string;
 
   constructor(
     public authService: AuthService,
@@ -19,7 +20,11 @@ export class NavComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.authService.currentPhotoUrl.subscribe(
+      (photoUrl) => (this.photoUrl = photoUrl)
+    );
+  }
 
   onLogin() {
     this.authService.login(this.loginForm.value).subscribe(
@@ -41,6 +46,9 @@ export class NavComponent implements OnInit {
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.authService.decodedToken = null;
+    this.authService.currentUser = null;
     this.alerify.message('logged out');
     this.router.navigate(['/home']);
   }
